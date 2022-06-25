@@ -7,7 +7,7 @@ type Props = {
     index:number
 }
 
-const FieldComponent:React.FC<Props> = ({index}) => {
+const TableRowComponent:React.FC<Props> = ({index}) => {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <TextField id={"title-" + index} label="やったこと" variant="outlined" />
@@ -39,4 +39,4 @@ const FieldComponent:React.FC<Props> = ({index}) => {
     )
 }
 
-export default FieldComponent
+export default TableRowComponent
