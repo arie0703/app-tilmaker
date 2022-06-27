@@ -12,6 +12,7 @@ import CodeComponent from './components/CodeComponent';
 const App:React.FC = () => {
   const [arrTableRows, setArrTableRow] = useState<number[]>([1]);
   const [code, setCode] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
   const [startTime, setStartTime] = useState<string>("09:30");
 
@@ -38,9 +39,9 @@ const App:React.FC = () => {
     // markdownをコピーする
     navigator.clipboard.writeText(output)
     .then(() => {
-      alert('コピーしました')
+      setMessage("コピーしました")
     }, function(err) {
-      alert('コピーに失敗しました')
+      setMessage("コピーに失敗しました")
     });
 
     setCode(output)
@@ -60,6 +61,9 @@ const App:React.FC = () => {
           <Button onClick={() => addRow()}>Add</Button>
           <Button onClick={() => removeRow()}>Remove</Button>
           <Button onClick={() => outputCode()}>Code</Button>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+          <p>{message}</p>
         </Box>
       </Box>
     </div>
