@@ -26,7 +26,7 @@ const App:React.FC = () => {
   }
 
   function outputCode(): void {
-    var output = ""
+    var output = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
     arrTableRows.map((i: number) => {
       let title = document.getElementById("title-" + i.toString()) as HTMLInputElement;
       let starttime = document.getElementById("starttime-" + i.toString()) as HTMLInputElement;
