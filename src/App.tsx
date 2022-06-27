@@ -34,6 +34,15 @@ const App:React.FC = () => {
       let minutes = document.getElementById("minutes-" + i.toString()) as HTMLInputElement;
       output += `|${i}|${title.value}|${starttime.value} - ${endtime.value}|${minutes.value}| \n`
     })
+
+    // markdownをコピーする
+    navigator.clipboard.writeText(output)
+    .then(() => {
+      alert('コピーしました')
+    }, function(err) {
+      alert('コピーに失敗しました')
+    });
+
     setCode(output)
   }
 
