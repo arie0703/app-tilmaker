@@ -10,30 +10,39 @@ import CodeComponent from './components/CodeComponent';
 
 
 const App:React.FC = () => {
-  const [arrTableRows, setArrTableRow] = useState([1]);
-  const [code, setCode] = useState("");
+  const [arrTableRows, setArrTableRow] = useState<number[]>([1]);
+  const [code, setCode] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
-  const [startTime, setStartTime] = useState("09:30");
+  const [startTime, setStartTime] = useState<string>("09:30");
 
-  function addRow() {
+  function addRow(): void {
     let lastTime = document.getElementById("endtime-" + arrTableRows.length) as HTMLInputElement;
     setStartTime(lastTime.value)
     setArrTableRow([...arrTableRows, arrTableRows.length + 1])
   }
 
-  function removeRow() {
+  function removeRow(): void {
     if (arrTableRows.length > 1) setArrTableRow(arrTableRows.filter((_, i) => i !== arrTableRows.length - 1))
   }
 
-  function outputCode() {
+  function outputCode(): void {
     var output = ""
-    arrTableRows.map((i) => {
+    arrTableRows.map((i: number) => {
       let title = document.getElementById("title-" + i.toString()) as HTMLInputElement;
       let starttime = document.getElementById("starttime-" + i.toString()) as HTMLInputElement;
       let endtime = document.getElementById("endtime-" + i.toString()) as HTMLInputElement;
       let minutes = document.getElementById("minutes-" + i.toString()) as HTMLInputElement;
       output += `|${i}|${title.value}|${starttime.value} - ${endtime.value}|${minutes.value}| \n`
     })
+
+    // markdownをコピーする
+    navigator.clipboard.writeText(output)
+    .then(() => {
+      alert('コピーしました')
+    }, function(err) {
+      alert('コピーに失敗しました')
+    });
+
     setCode(output)
   }
 
@@ -43,7 +52,7 @@ const App:React.FC = () => {
         <p>ちるちる（β）</p>
       </div>
       <Box className="App-content">
-        {arrTableRows.map((index) => {
+        {arrTableRows.map((index: number) => {
           return <TableRowComponent index={index} defaultTime={startTime}></TableRowComponent>
         })}
         <CodeComponent code={code}></CodeComponent>
