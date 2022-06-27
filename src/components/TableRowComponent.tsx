@@ -10,9 +10,9 @@ type Props = {
 
 const TableRowComponent:React.FC<Props> = ({index, defaultTime}) => {
 
-    const [minutes, setMinutes] = useState(0);
+    const [minutes, setMinutes] = useState<number>(0);
     
-    function getMinutes() {
+    function getMinutes(): void {
       let starttime = document.getElementById("starttime-" + index.toString()) as HTMLInputElement;
       let endtime = document.getElementById("endtime-" + index.toString()) as HTMLInputElement;
 
