@@ -66,7 +66,7 @@ const App:React.FC = () => {
       </div>
       <Box className="App-content">
         {arrTableRows.map((data: TableRow, index: number) => {
-          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow}></TableRowComponent>
+          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
         })}
         <CodeComponent code={code}></CodeComponent>
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
