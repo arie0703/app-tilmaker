@@ -24,13 +24,9 @@ const App:React.FC = () => {
     let lastTime = document.getElementById("endtime-" + backRow.uniqueId) as HTMLInputElement;
     setStartTime(lastTime.value)
 
-    setArrTableRow(
-      [
-        ...arrTableRows.slice(0,index+1), 
-        {uniqueId: getUniqueStr(), title: "", startTime: lastTime.value, endTime: lastTime.value}, 
-        ...arrTableRows.slice(index+1)
-      ]
-    )
+    const rows = [...arrTableRows];
+    rows.splice(index+1, 0, {uniqueId: getUniqueStr(), title: "", startTime: lastTime.value, endTime: lastTime.value})
+    setArrTableRow(rows);
   }
 
   function updateRow(index: number, changedData: TableRow): void {
@@ -70,7 +66,7 @@ const App:React.FC = () => {
       </div>
       <Box className="App-content">
         {arrTableRows.map((data: TableRow, index: number) => {
-          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow}></TableRowComponent>
+          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
         })}
         <CodeComponent code={code}></CodeComponent>
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
