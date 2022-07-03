@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import TableRowComponent from './components/TableRowComponent';
 import CodeComponent from './components/CodeComponent';
 import TableRow from './types/TableRow';
+import Elephant from './assets/elephant.png'
+import {getLocalData, setLocalData} from '././functions/localStorage';
 
 
 
@@ -16,6 +18,13 @@ const App:React.FC = () => {
   const [message, setMessage] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
   const [startTime, setStartTime] = useState<string>("09:30");
+
+  useEffect(() => {
+    const data = getLocalData();
+    if (data) {
+      setArrTableRow(data)
+    }
+  },[]);
 
   function addRow(index: number): void {
 
@@ -31,6 +40,7 @@ const App:React.FC = () => {
 
   function updateRow(index: number, changedData: TableRow): void {
     arrTableRows[index] = changedData
+    setLocalData(arrTableRows);
   }
 
   function removeRow(index: number): void {
@@ -50,7 +60,7 @@ const App:React.FC = () => {
     // markdownをコピーする
     navigator.clipboard.writeText(output)
     .then(() => {
-      setMessage("コピーしました")
+      setMessage("コピーしたゾウ")
     }, function(err) {
       setMessage("コピーに失敗しました")
     });
@@ -72,8 +82,11 @@ const App:React.FC = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <Button onClick={() => outputCode()}>Code</Button>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
-          <p>{message}</p>
+        <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
+          <img src={Elephant} style={{width: "150px"}}></img>
+          <Box sx={{backgroundColor: "skyblue", padding: "10px 40px", borderRadius: "15px", marginLeft: "10px"}}>
+            <p>{message}</p>
+          </Box>
         </Box>
       </Box>
     </div>
