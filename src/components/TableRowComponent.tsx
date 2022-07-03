@@ -33,6 +33,11 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
       setMinutes(diff)
     }
 
+    useEffect(() => {
+      // localStorageからデータ取得時に「所要時間」の計算処理を発火
+      getMinutes()
+    },[data]);
+
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <TextField
