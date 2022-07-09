@@ -3,11 +3,14 @@ import getUniqueStr from './functions/getUniqueStr';
 import './App.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import TemplateListComponent from './components/TemplateListComponent';
 import TableRowComponent from './components/TableRowComponent';
+import TextField from '@mui/material/TextField';
 import CodeComponent from './components/CodeComponent';
 import TableRow from './types/TableRow';
 import Elephant from './assets/elephant.png'
-import {getLocalData, setLocalData} from '././functions/localStorage';
+import Template from './types/Template';
+import {getLocalData, setLocalData, addTemplate, getTemplates} from '././functions/localStorage';
 
 
 
@@ -18,6 +21,8 @@ const App:React.FC = () => {
   const [message, setMessage] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
   const [startTime, setStartTime] = useState<string>("09:30");
+  const [templateList, setTemplateList] = useState<Template[]>(getTemplates())
+  const [templateTitle, setTemplateTitle] = useState<string>("");
 
   useEffect(() => {
     const data = getLocalData();
@@ -45,6 +50,12 @@ const App:React.FC = () => {
 
   function removeRow(index: number): void {
     if (arrTableRows.length > 1) setArrTableRow(arrTableRows.filter((_, i) => i !== index))
+  }
+
+  function _addTemplate() {
+    addTemplate({title: templateTitle, data: arrTableRows})
+    setTemplateList(getTemplates())
+    setMessage("テンプレートを追加したゾウ")
   }
 
   function outputCode(): void {
@@ -75,12 +86,24 @@ const App:React.FC = () => {
         <p>ちるちる（β）</p>
       </div>
       <Box className="App-content">
+        <TemplateListComponent setArrTableRow={setArrTableRow} templateList={templateList} setTemplateList={setTemplateList}></TemplateListComponent>
         {arrTableRows.map((data: TableRow, index: number) => {
           return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
         })}
         <CodeComponent code={code}></CodeComponent>
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <Button onClick={() => outputCode()}>Code</Button>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+          <TextField
+            onChange={(e) => {
+              setTemplateTitle(e.target.value)
+            }}
+            label="テンプレート名"
+            value={templateTitle}
+            variant="outlined"
+          />
+          <Button onClick={() => _addTemplate()}>Add</Button>
         </Box>
         <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
           <img src={Elephant} style={{width: "150px"}}></img>
