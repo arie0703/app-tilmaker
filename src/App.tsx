@@ -58,6 +58,12 @@ const App:React.FC = () => {
     setMessage("テンプレートを追加したゾウ")
   }
 
+  function clearTable() {
+    if (window.confirm("入力内容をリセットしますか？")) {
+      setArrTableRow([{uniqueId: getUniqueStr(), title: "", startTime: "09:30", endTime: "09:30"}])
+    }
+  }
+
   function outputCode(): void {
     var output = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
     arrTableRows.map((data: TableRow, index: number) => {
@@ -107,6 +113,7 @@ const App:React.FC = () => {
         <CodeComponent code={code}></CodeComponent>
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <Button onClick={() => outputCode()}>Code</Button>
+          <Button onClick={() => clearTable()}>Clear</Button>
         </Box>
         
         <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
