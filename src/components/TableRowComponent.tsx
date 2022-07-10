@@ -39,7 +39,7 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
     },[data]);
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+        <Box sx={{ display: 'flex'}}>
           <TextField
             id={"title-" + uniqueId}
             onChange={(e) => {
@@ -47,7 +47,8 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
               updateRow(index, data);
               setTitleField(e.target.value)
             }}
-            label="やったこと"
+            sx={{width: '50%'}}
+            placeholder="やったこと"
             value={data.title}
             variant="outlined"
           />

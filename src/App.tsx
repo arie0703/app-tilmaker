@@ -17,7 +17,7 @@ import {getLocalData, setLocalData, addTemplate, getTemplates} from '././functio
 const App:React.FC = () => {
 
   const [arrTableRows, setArrTableRow] = useState<TableRow[]>([{uniqueId: getUniqueStr(), title: "", startTime: "09:30", endTime: "09:30"}]);
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<string>("Codeボタンを押すと、マークダウンが出力されるよ！");
   const [message, setMessage] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
   const [startTime, setStartTime] = useState<string>("09:30");
@@ -87,14 +87,7 @@ const App:React.FC = () => {
       </div>
       <Box className="App-content">
         <TemplateListComponent setArrTableRow={setArrTableRow} templateList={templateList} setTemplateList={setTemplateList}></TemplateListComponent>
-        {arrTableRows.map((data: TableRow, index: number) => {
-          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
-        })}
-        <CodeComponent code={code}></CodeComponent>
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
-          <Button onClick={() => outputCode()}>Code</Button>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+        <Box sx={{ display: 'flex'}}>
           <TextField
             onChange={(e) => {
               setTemplateTitle(e.target.value)
@@ -105,6 +98,17 @@ const App:React.FC = () => {
           />
           <Button onClick={() => _addTemplate()}>Add</Button>
         </Box>
+        <small>※キャッシュを消すとテンプレートも消えます</small>
+        <Box sx={{margin: '20px 0'}}>
+          {arrTableRows.map((data: TableRow, index: number) => {
+            return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
+          })}
+        </Box>
+        <CodeComponent code={code}></CodeComponent>
+        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+          <Button onClick={() => outputCode()}>Code</Button>
+        </Box>
+        
         <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
           <img src={Elephant} style={{width: "150px"}}></img>
           <Box sx={{backgroundColor: "skyblue", padding: "10px 40px", borderRadius: "15px", marginLeft: "10px"}}>
