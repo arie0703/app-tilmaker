@@ -19,8 +19,10 @@ const TemplateListComponent:React.FC<Props> = ({setArrTableRow, templateList, se
 
 
     function _removeTemplate(index: number) {
-        removeTemplate(index)
-        setTemplateList(getTemplates())
+        if (window.confirm("テンプレートを削除しますか？")) {
+            removeTemplate(index)
+            setTemplateList(getTemplates())
+        }
     }
 
     return (
