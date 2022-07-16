@@ -65,14 +65,18 @@ const App:React.FC = () => {
   }
 
   function outputCode(): void {
-    var output = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
+    var output: string = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
+    var done_list: string = "\n## やったこと\n"
     arrTableRows.map((data: TableRow, index: number) => {
       let title = document.getElementById("title-" + data.uniqueId) as HTMLInputElement;
       let starttime = document.getElementById("starttime-" + data.uniqueId) as HTMLInputElement;
       let endtime = document.getElementById("endtime-" + data.uniqueId) as HTMLInputElement;
       let minutes = document.getElementById("minutes-" + data.uniqueId) as HTMLInputElement;
       output += `|${index + 1}|${title.value}|${starttime.value} - ${endtime.value}|${minutes.value}| \n`
+      done_list += `- ${title.value} \n`
     })
+    output += done_list
+
 
     // markdownをコピーする
     navigator.clipboard.writeText(output)
