@@ -65,7 +65,7 @@ const App:React.FC = () => {
   }
 
   function outputCode(): void {
-    var output: string = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
+    var output: string = "## 作業実績 \n|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
     var done_list: string = "\n## やったこと\n"
     arrTableRows.map((data: TableRow, index: number) => {
       let title = document.getElementById("title-" + data.uniqueId) as HTMLInputElement;
@@ -73,7 +73,12 @@ const App:React.FC = () => {
       let endtime = document.getElementById("endtime-" + data.uniqueId) as HTMLInputElement;
       let minutes = document.getElementById("minutes-" + data.uniqueId) as HTMLInputElement;
       output += `|${index + 1}|${title.value}|${starttime.value} - ${endtime.value}|${minutes.value}| \n`
-      done_list += `- ${title.value} \n`
+
+      // checkboxの値がtrueなら「やったこと」に追加
+      let isAddDoneList = document.getElementById("isAddDoneList-" + data.uniqueId) as HTMLInputElement;
+      if(isAddDoneList.checked) {
+        done_list += `- ${title.value} \n`
+      }
     })
     output += done_list
 
@@ -108,7 +113,15 @@ const App:React.FC = () => {
           />
           <Button onClick={() => _addTemplate()}>Add</Button>
         </Box>
-        <small>※キャッシュを消すとテンプレートも消えます</small>
+        <div>
+          <small>※キャッシュを消すとテンプレートも消えます</small>
+        </div>
+        <small>
+          <b>
+            ## やったこと
+          </b>
+          に追加したい場合、チェックボックスを押してください
+        </small>
         <Box sx={{margin: '20px 0'}}>
           {arrTableRows.map((data: TableRow, index: number) => {
             return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
@@ -119,7 +132,6 @@ const App:React.FC = () => {
           <Button onClick={() => outputCode()}>Code</Button>
           <Button onClick={() => clearTable()}>Clear</Button>
         </Box>
-        
         <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
           <img src={Elephant} style={{width: "150px"}}></img>
           <Box sx={{backgroundColor: "skyblue", padding: "10px 40px", borderRadius: "15px", marginLeft: "10px"}}>
