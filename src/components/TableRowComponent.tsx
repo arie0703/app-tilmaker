@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TableRow from '../types/TableRow';
+import Checkbox from '@mui/material/Checkbox';
 
 type Props = {
     data:TableRow
@@ -40,6 +41,7 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
 
     return (
         <Box sx={{ display: 'flex'}}>
+          <Checkbox id={"isAddDoneList-" + uniqueId} defaultChecked />
           <TextField
             id={"title-" + uniqueId}
             onChange={(e) => {
