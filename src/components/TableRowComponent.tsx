@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import TableRow from '../types/TableRow';
+import Checkbox from '@mui/material/Checkbox';
 
 type Props = {
     data:TableRow
@@ -33,8 +34,14 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
       setMinutes(diff)
     }
 
+    useEffect(() => {
+      // localStorageからデータ取得時に「所要時間」の計算処理を発火
+      getMinutes()
+    },[data]);
+
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+        <Box sx={{ display: 'flex'}}>
+          <Checkbox id={"isAddDoneList-" + uniqueId} defaultChecked />
           <TextField
             id={"title-" + uniqueId}
             onChange={(e) => {
@@ -42,7 +49,8 @@ const TableRowComponent:React.FC<Props> = ({data, taskNumber, defaultTime, addRo
               updateRow(index, data);
               setTitleField(e.target.value)
             }}
-            label="やったこと"
+            sx={{width: '50%'}}
+            placeholder="やったこと"
             value={data.title}
             variant="outlined"
           />

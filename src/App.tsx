@@ -3,19 +3,33 @@ import getUniqueStr from './functions/getUniqueStr';
 import './App.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import TemplateListComponent from './components/TemplateListComponent';
 import TableRowComponent from './components/TableRowComponent';
+import TextField from '@mui/material/TextField';
 import CodeComponent from './components/CodeComponent';
 import TableRow from './types/TableRow';
+import Elephant from './assets/elephant.png'
+import Template from './types/Template';
+import {getLocalData, setLocalData, addTemplate, getTemplates} from '././functions/localStorage';
 
 
 
 const App:React.FC = () => {
 
   const [arrTableRows, setArrTableRow] = useState<TableRow[]>([{uniqueId: getUniqueStr(), title: "", startTime: "09:30", endTime: "09:30"}]);
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<string>("Codeボタンを押すと、マークダウンが出力されるよ！");
   const [message, setMessage] = useState<string>("");
   // 時間テーブルのinputのデフォルト値として使用する
   const [startTime, setStartTime] = useState<string>("09:30");
+  const [templateList, setTemplateList] = useState<Template[]>(getTemplates())
+  const [templateTitle, setTemplateTitle] = useState<string>("");
+
+  useEffect(() => {
+    const data = getLocalData();
+    if (data) {
+      setArrTableRow(data)
+    }
+  },[]);
 
   function addRow(index: number): void {
 
@@ -31,26 +45,50 @@ const App:React.FC = () => {
 
   function updateRow(index: number, changedData: TableRow): void {
     arrTableRows[index] = changedData
+    setLocalData(arrTableRows);
   }
 
   function removeRow(index: number): void {
     if (arrTableRows.length > 1) setArrTableRow(arrTableRows.filter((_, i) => i !== index))
   }
 
+  function _addTemplate() {
+    addTemplate({title: templateTitle, data: arrTableRows})
+    setTemplateList(getTemplates())
+    setMessage("テンプレートを追加したゾウ")
+  }
+
+  function clearTable() {
+    if (window.confirm("入力内容をリセットしますか？")) {
+      setArrTableRow([{uniqueId: getUniqueStr(), title: "", startTime: "09:30", endTime: "09:30"}])
+    }
+  }
+
   function outputCode(): void {
-    var output = "|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
+    var output: string = "## 作業実績 \n|No|タスク|開始~終了|所要時間(分)|\n|--|--|--|--|\n"
+    var done_list: string = "\n## やったこと\n"
     arrTableRows.map((data: TableRow, index: number) => {
       let title = document.getElementById("title-" + data.uniqueId) as HTMLInputElement;
       let starttime = document.getElementById("starttime-" + data.uniqueId) as HTMLInputElement;
       let endtime = document.getElementById("endtime-" + data.uniqueId) as HTMLInputElement;
       let minutes = document.getElementById("minutes-" + data.uniqueId) as HTMLInputElement;
       output += `|${index + 1}|${title.value}|${starttime.value} - ${endtime.value}|${minutes.value}| \n`
+
+      // checkboxの値がtrueなら「やったこと」に追加
+      let isAddDoneList = document.getElementById("isAddDoneList-" + data.uniqueId) as HTMLInputElement;
+      if(isAddDoneList.checked) {
+        done_list += `- ${title.value} \n`
+      }
     })
+    output += done_list
+
+    output += "\n## よかった点+明日以降も継続したいこと\n\n## 反省点+明日以降改善したいこと\n\n## 次営業日の目標・意識すること\n"
+
 
     // markdownをコピーする
     navigator.clipboard.writeText(output)
     .then(() => {
-      setMessage("コピーしました")
+      setMessage("コピーしたゾウ")
     }, function(err) {
       setMessage("コピーに失敗しました")
     });
@@ -65,15 +103,42 @@ const App:React.FC = () => {
         <p>ちるちる（β）</p>
       </div>
       <Box className="App-content">
-        {arrTableRows.map((data: TableRow, index: number) => {
-          return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
-        })}
+        <TemplateListComponent setArrTableRow={setArrTableRow} templateList={templateList} setTemplateList={setTemplateList}></TemplateListComponent>
+        <Box sx={{ display: 'flex'}}>
+          <TextField
+            onChange={(e) => {
+              setTemplateTitle(e.target.value)
+            }}
+            label="テンプレート名"
+            value={templateTitle}
+            variant="outlined"
+          />
+          <Button onClick={() => _addTemplate()}>Add</Button>
+        </Box>
+        <div>
+          <small>※キャッシュを消すとテンプレートも消えます</small>
+        </div>
+        <small>
+          <b>
+            ## やったこと
+          </b>
+          に追加したい場合、チェックボックスを押してください
+        </small>
+        <Box sx={{margin: '20px 0'}}>
+          {arrTableRows.map((data: TableRow, index: number) => {
+            return <TableRowComponent data={data} taskNumber={index+1} defaultTime={startTime} addRow={addRow} removeRow={removeRow} updateRow={updateRow} key={index}></TableRowComponent>
+          })}
+        </Box>
         <CodeComponent code={code}></CodeComponent>
         <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <Button onClick={() => outputCode()}>Code</Button>
+          <Button onClick={() => clearTable()}>Clear</Button>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
-          <p>{message}</p>
+        <Box sx={{ display: message ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center'}}>
+          <img src={Elephant} style={{width: "150px"}}></img>
+          <Box sx={{backgroundColor: "skyblue", padding: "10px 40px", borderRadius: "15px", marginLeft: "10px"}}>
+            <p>{message}</p>
+          </Box>
         </Box>
       </Box>
     </div>
