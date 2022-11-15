@@ -82,6 +82,8 @@ const App:React.FC = () => {
     })
     output += done_list
 
+    output += "\n## よかった点+明日以降も継続したいこと\n\n## 反省点+明日以降改善したいこと\n\n## 次営業日の目標・意識すること\n"
+
 
     // markdownをコピーする
     navigator.clipboard.writeText(output)
